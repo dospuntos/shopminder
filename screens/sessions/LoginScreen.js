@@ -3,12 +3,14 @@ import { View, Text } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Button } from "react-native-paper";
 import styles from "./styles";
+import { auth } from "../../firebase";
 
 const LoginScreen = ({ navigation }) => {
   const { control, handleSubmit, errors } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const { email, password } = data;
+    auth.signInWithEmailAndPassword(email.trim().toLowerCase(), password);
   };
 
   return (

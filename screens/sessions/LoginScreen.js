@@ -2,8 +2,9 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Button } from "react-native-paper";
+import styles from "./styles";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const { control, handleSubmit, errors } = useForm();
 
   const onSubmit = (data) => {
@@ -11,7 +12,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View>
+    <View style={styles.authFormContainer}>
       <Controller
         control={control}
         render={({ onChange, onBlur, value }) => (
@@ -21,13 +22,18 @@ const LoginScreen = () => {
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
             value={value}
+            style={styles.formInput}
           />
         )}
         name="email"
         rules={{ required: true }}
         defaultValue=""
       />
-      <View>{errors.email && <Text>You must fill in your email</Text>}</View>
+      <View style={styles.errorMsg}>
+        {errors.email && (
+          <Text style={styles.errorText}>You must fill in your email</Text>
+        )}
+      </View>
 
       <Controller
         control={control}
@@ -39,14 +45,17 @@ const LoginScreen = () => {
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
             value={value}
+            style={styles.formInput}
           />
         )}
         name="password"
         rules={{ required: true }}
         defaultValue=""
       />
-      <View>
-        {errors.password && <Text>You must fill in your password</Text>}
+      <View style={styles.errorMsg}>
+        {errors.password && (
+          <Text style={styles.errorText}>You must fill in your password</Text>
+        )}
       </View>
       <View>
         <Button
@@ -54,10 +63,23 @@ const LoginScreen = () => {
           compact={false}
           onPress={handleSubmit(onSubmit)}
           icon="account-arrow-right"
+          style={styles.submitButton}
         >
           Sign in
         </Button>
       </View>
+      <View style={styles.switchScreenText}>
+        <Text>Don't have an account yet?</Text>
+      </View>
+      <Button
+        mode="outlined"
+        style={styles.switchBtn}
+        icon="account-plus"
+        compact
+        onPress={() => navigation.navigate("register")}
+      >
+        Register Account
+      </Button>
     </View>
   );
 };

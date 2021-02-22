@@ -1,8 +1,50 @@
 import React from "react";
-import { Text } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { StatusBar } from "expo-status-bar";
+import ViewAll from "./shopminders/ViewAll";
+import AddOne from "./shopminders/AddOne";
+
+const Stack = createStackNavigator();
 
 const ShopmindersTab = () => {
-  return <Text>Shopminders</Text>;
+  const forFade = ({ current }) => ({
+    cardStyle: {
+      opacity: current.progress,
+      backgroundColor: "transparent",
+    },
+  });
+
+  return (
+    <>
+      <StatusBar style="light" />
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#29434e",
+          },
+        }}
+      >
+        <Stack.Screen
+          name="viewAll"
+          component={ViewAll}
+          options={{
+            title: "Shopminders",
+            cardStyleInterpolator: forFade,
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="addOne"
+          component={AddOne}
+          options={{
+            title: "Add Shopminder",
+            cardStyleInterpolator: forFade,
+            headerTintColor: "#fff",
+          }}
+        />
+      </Stack.Navigator>
+    </>
+  );
 };
 
 export default ShopmindersTab;

@@ -1,11 +1,17 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Text } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { Text, SafeAreaView } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { FontAwesome } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
+import ShopmindersTab from "./screens/ShopmindersTab";
+import SettingsTab from "./screens/SettingsTab";
+
+const Tab = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -28,9 +34,46 @@ export default function App() {
   return (
     <NavigationContainer theme={DefaultTheme}>
       {signedIn ? (
-        <Text>Signed in</Text>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#29434e" }}>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size }) => {
+                if (route.name === "shopminders") {
+                  return (
+                    <FontAwesome name="list-ul" size={size} color={color} />
+                  );
+                }
+                if (route.name === "settings") {
+                  return <FontAwesome name="cogs" size={size} color={color} />;
+                }
+              },
+            })}
+            tabBarOptions={{
+              activeTintColor: "white",
+              inactiveTintColor: "#819ca9",
+              style: {
+                backgroundColor: "#29434e",
+              },
+            }}
+          >
+            <Tab.Screen
+              name="shopminders"
+              component={ShopmindersTab}
+              options={{
+                title: "Shopminders",
+              }}
+            />
+            <Tab.Screen
+              name="settings"
+              component={SettingsTab}
+              options={{
+                title: "Settings",
+              }}
+            />
+          </Tab.Navigator>
+        </SafeAreaView>
       ) : (
-        <>
+        <SafeAreaView>
           <StatusBar style="light" />
           <Stack.Navigator mode="card" screenOptions={{}}>
             <Stack.Screen
@@ -60,7 +103,7 @@ export default function App() {
               }}
             />
           </Stack.Navigator>
-        </>
+        </SafeAreaView>
       )}
     </NavigationContainer>
   );

@@ -10,6 +10,14 @@ import RegisterScreen from "./screens/sessions/RegisterScreen";
 const Stack = createStackNavigator();
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
+
+  const forFade = ({ current }) => ({
+    cardStyle: {
+      opacity: current.progress,
+      backgroundColor: "transparent",
+    },
+  });
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       setSignedIn(true);
@@ -35,6 +43,7 @@ export default function App() {
                   borderBottomColor: "#29434e",
                 },
                 headerTintColor: "#fff",
+                cardStyleInterpolator: forFade,
               }}
             />
             <Stack.Screen
@@ -47,6 +56,7 @@ export default function App() {
                   borderBottomColor: "#29434e",
                 },
                 headerTintColor: "#fff",
+                cardStyleInterpolator: forFade,
               }}
             />
           </Stack.Navigator>

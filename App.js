@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
@@ -8,14 +8,14 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
-import ShopmindersTab from "./screens/ShopmindersTab";
+import ShopmindersTab from "./screens/ShopMindersTab";
 import SettingsTab from "./screens/SettingsTab";
 
 const Tab = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
 export default function App() {
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = useState(true);
 
   const forFade = ({ current }) => ({
     cardStyle: {
@@ -24,13 +24,13 @@ export default function App() {
     },
   });
 
-  auth.onAuthStateChanged((user) => {
+  /* auth.onAuthStateChanged((user) => {
     if (user) {
       setSignedIn(true);
     } else {
       setSignedIn(false);
     }
-  });
+  }); */
   return (
     <NavigationContainer theme={DefaultTheme}>
       {signedIn ? (
@@ -60,14 +60,14 @@ export default function App() {
               name="shopminders"
               component={ShopmindersTab}
               options={{
-                title: "Shopminders",
+                title: "Productos",
               }}
             />
             <Tab.Screen
               name="settings"
               component={SettingsTab}
               options={{
-                title: "Settings",
+                title: "Configuración",
               }}
             />
           </Tab.Navigator>

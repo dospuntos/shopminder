@@ -28,7 +28,7 @@ const ShopmindersTab = () => {
           name="viewAll"
           component={ViewAll}
           options={{
-            title: "Shopminders",
+            title: "Productos",
             cardStyleInterpolator: forFade,
             headerTintColor: "#fff",
           }}
@@ -37,7 +37,7 @@ const ShopmindersTab = () => {
           name="addOne"
           component={AddOne}
           options={{
-            title: "Add Shopminder",
+            title: "Agregar Producto",
             cardStyleInterpolator: forFade,
             headerTintColor: "#fff",
           }}

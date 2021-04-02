@@ -1,76 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Text, ScrollView, View } from "react-native";
+import { Text, Alert, ScrollView, View, Image } from "react-native";
 import { List, Divider, FAB } from "react-native-paper";
+import { getProducts } from "../../api/productApi";
 import styles from "./styles";
-import { db, auth } from "../../firebase";
 
 const ViewAll = ({ navigation }) => {
   const [shopminders, setShopminders] = useState([]);
-
-  const user = auth.currentUser;
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const ref = db
-      .collection("shopminders")
-      .where("belongsTo", "==", user.uid)
-      .orderBy("createdAt", "desc");
-    ref.onSnapshot((query) => {
-      const objs = [];
-      query.forEach((doc) => {
-        objs.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-      });
-      setShopminders(objs);
-    });
+    getProducts().then((products) => setProducts(products.data.products));
   }, []);
 
-  const handleComplete = async (shopminder) => {
-    const ref = db.collection("shopminders").doc(shopminder.id);
-    try {
-      await ref.set(
-        {
-          completed: !shopminder.completed,
-        },
-        { merge: true }
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDelete = async (shopminder) => {
-    const ref = db.collection("shopminders").doc(shopminder.id);
-    try {
-      Alert.alert("Are you sure?", "Are you sure you want to delete?", [
-        {
-          text: "Cancel",
-          onPress: () => null,
-        },
-        {
-          text: "Delete",
-          onPress: async () => await ref.delete(),
-        },
-      ]);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // Return early if no products
+  if (!products.length) return <Text> Loading...</Text>;
 
   return (
     <>
       <ScrollView>
         <View>
-          {shopminders.map((shopminder) => (
-            <View key={shopminder.id}>
-              <List.Item
-                title={shopminder.name}
-                onPress={() => handleComplete(shopminder)}
-                titleStyle={
-                  shopminder.completed ? styles.complete : styles.notComplete
-                }
-                onLongPress={() => handleDelete(shopminder)}
+          {products.map((product) => (
+            <View key={product.id}>
+              {/* <List.Item title={JSON.stringify(product.images[0]?.image)} /> */}
+              <Image
+                style={{ width: 200, height: 200 }}
+                source={{
+                  uri:
+                    "http://localhost/modaz_backup/images/products/" +
+                    product.images[0]?.image,
+                }}
               />
               <Divider />
             </View>
